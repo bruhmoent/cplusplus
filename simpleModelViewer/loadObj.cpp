@@ -339,7 +339,7 @@ int main() {
         glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "rotation"), 1, GL_FALSE, glm::value_ptr(rotation));
 
         glUniform3f(glGetUniformLocation(shaderProgram, "viewPos"), camera.Position.x, camera.Position.y, camera.Position.z);
-glUniform3f(glGetUniformLocation(shaderProgram, "cameraFront"), camera.Front.x, camera.Front.y, camera.Front.z);
+        glUniform3f(glGetUniformLocation(shaderProgram, "cameraFront"), camera.Front.x, camera.Front.y, camera.Front.z);
         glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
         clearBuffer(width, height);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
