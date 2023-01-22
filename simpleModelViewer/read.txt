@@ -1,3 +1,3 @@
-NOTE: It loads very simple models, and beware that .obj are read differently than you think!
+NOTE: I will write a wrapper for my vertice format. Some .obj files might not work due to my formatting.
 
 Move the shape: arrow keys.
