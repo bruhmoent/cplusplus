@@ -1,66 +1,73 @@
 #pragma once
 
-#include <iostream>
-#include <vector>
+#include "elements.hpp"
+#include "element.hpp"
 
 #ifndef MAP_HPP
 #define MAP_HPP
 
-struct
+struct 
 Map
 {
-	char m_playingField[9][9]; //0-9
-	std::vector< std::pair <int, int> > m_createdShips;
-	int m_size = sizeof(m_playingField) / sizeof(m_playingField[0]);
+    char m_playingField[9][9]; //0-9
+    int m_size;
+    Elements& m_elements;
 
-	Map(char point)
-	{
-		for (int i = 0; i < m_size; i++)
-		{
-			for (int j = 0; j < m_size; j++)
-			{
-				m_playingField[i][j] = point;
-			}
-		}
-	}
+    Map(char point, Elements& elements) : m_size(9), m_elements(elements)
+    {
+        for (int i = 0; i < m_size; i++)
+        {
+            for (int j = 0; j < m_size; j++)
+            {
+                m_playingField[j][i] = point;
+            }
+        }
+    }
 
-	void
-	displayMap()
-	{
-		int rows = sizeof(m_playingField) / sizeof(m_playingField[0]);
-		int columns = sizeof(m_playingField[0]) / sizeof(m_playingField[0][0]);
+    void 
+    displayMap()
+    {
+        if (m_size <= 0)
+        {
+            std::cerr << "Invalid map size.\n";
+            return;
+        }
 
-		for (int i = 0; i < rows; i++)
-		{
-			for (int j = 0; j < columns; j++)
-			{
-				std::cout << m_playingField[i][j];
-			}
-			std::cout << "\n";
-		}
-	}
+        for (int i = 0; i < m_size; i++)
+        {
+            for (int j = 0; j < m_size; j++)
+            {
+                m_playingField[j][i] = '.';
+            }
+        }
 
-	void
-	addPoint(int coordinateX, int coordinateY, char point)
-	{
-		if (coordinateX >= m_size || coordinateY >= m_size)
-		{
-			std::cerr << "Coordinates (" << coordinateX << ", " << coordinateY << ") are out of reach.\n";
-			return;
-		}
+        for (const auto& element : m_elements.m_elements)
+        {
+            for (const std::pair<int, int>& coordinate : element.elementCoordinates)
+            {
+                int x = coordinate.first;
+                int y = coordinate.second;
 
-		std::pair<int, int> coordinates = std::make_pair(coordinateY, coordinateX);
-		if (std::find(m_createdShips.begin(), m_createdShips.end(), coordinates) != m_createdShips.end())
-		{
-			std::cerr << "Coordinates (" << coordinateX << ", " << coordinateY << ") already exist.\n";
-			return;
-		}
+                if (x >= 0 && x < m_size && y >= 0 && y < m_size)
+                {
+                    m_playingField[y][x] = '*';
+                }
+                else
+                {
+                    std::cerr << "Invalid element coordinate: (" << x << ", " << y << ")\n";
+                }
+            }
+        }
 
-		m_playingField[coordinateY][coordinateX] = point;
-		m_createdShips.push_back(coordinates);
-		displayMap();
-	}
-
+        for (int i = 0; i < m_size; i++)
+        {
+            for (int j = 0; j < m_size; j++)
+            {
+                std::cout << m_playingField[j][i];
+            }
+            std::cout << "\n";
+        }
+    }
 };
 
 #endif
