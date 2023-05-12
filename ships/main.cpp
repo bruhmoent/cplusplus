@@ -1,28 +1,70 @@
-#include "map.hpp"
+#include "elements.hpp"
 
-Map g_map('-');
+Map g_map('.');
+Elements g_elements;
 
 int main()
 {
 	char l_choice;
 	int c_X, c_Y;
 
-	do 
-	{
-		std::cout << "Select coordinate X: \n";
-		std::cin >> c_X;
+    while (true)
+    {
+        std::vector<std::pair<int, int>> tmpCoordinates;
 
-		std::cout << "Select coordinate Y: \n";
-		std::cin >> c_Y;
+        while (true)
+        {
+            std::cout << "Select coordinate X (or enter -1 to stop adding coordinates): ";
+            std::cin >> c_X;
 
-		std::cout << std::endl;
+            if (c_X == -1)
+                break;
 
-		g_map.addPoint(c_X, c_Y, 'V');
+            std::cout << "Select coordinate Y: ";
+            std::cin >> c_Y;
 
-		std::cout << "\nRepeat operation? (Y/N) \n";
-		std::cin >> l_choice;
+            std::cout << std::endl;
 
-	} while (l_choice == 'Y');
+            std::pair<int, int> coordinates = std::make_pair(c_Y, c_X);
+
+            bool coordinatesExist = false;
+            for (const auto& coordinate : tmpCoordinates)
+            {
+                if (coordinate == coordinates)
+                {
+                    coordinatesExist = true;
+                    break;
+                }
+            }
+
+            if (coordinatesExist)
+            {
+                std::cerr << "These coordinates are already used. Please enter different coordinates.\n";
+                continue;
+            }
+
+            g_map.addPoint(c_X, c_Y, 'O');
+            tmpCoordinates.push_back(coordinates);
+        }
+
+        g_elements.addElement(Element(tmpCoordinates, 100));
+
+        for (const Element& element : g_elements.m_elements)
+        {
+            std::cout << "Element Coordinates: ";
+            for (const auto& coordinate : element.elementCoordinates)
+            {
+                std::cout << "(" << coordinate.first << ", " << coordinate.second << ") ";
+            }
+            std::cout << std::endl;
+        }
+
+        std::cout << "Do you want to continue playing? (Y/N): ";
+        std::cin >> l_choice;
+
+        if (l_choice != 'Y')
+            break;
+    }
 
 	return 0;
 }
