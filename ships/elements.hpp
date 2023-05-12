@@ -9,7 +9,7 @@ struct
 Elements
 {
 
-	std::vector<Element> m_elements;
+    std::vector<Element> m_elements;
 
     void addElement(Element e)
     {
