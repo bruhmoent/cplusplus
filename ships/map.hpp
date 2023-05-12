@@ -24,15 +24,15 @@ Map
 		}
 	}
 
-	void 
+	void
 	displayMap()
 	{
 		int rows = sizeof(m_playingField) / sizeof(m_playingField[0]);
 		int columns = sizeof(m_playingField[0]) / sizeof(m_playingField[0][0]);
 
-		for (int i = 0; i < rows; i++) 
+		for (int i = 0; i < rows; i++)
 		{
-			for (int j = 0; j < columns; j++) 
+			for (int j = 0; j < columns; j++)
 			{
 				std::cout << m_playingField[i][j];
 			}
@@ -40,8 +40,8 @@ Map
 		}
 	}
 
-	void 
-	addPoint(int coordinateX, int coordinateY, char point) 
+	void
+	addPoint(int coordinateX, int coordinateY, char point)
 	{
 		if (coordinateX >= m_size || coordinateY >= m_size)
 		{
@@ -50,7 +50,7 @@ Map
 		}
 
 		std::pair<int, int> coordinates = std::make_pair(coordinateY, coordinateX);
-		if (std::find(m_createdShips.begin(), m_createdShips.end(), coordinates) != m_createdShips.end()) 
+		if (std::find(m_createdShips.begin(), m_createdShips.end(), coordinates) != m_createdShips.end())
 		{
 			std::cerr << "Coordinates (" << coordinateX << ", " << coordinateY << ") already exist.\n";
 			return;
