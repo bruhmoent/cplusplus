@@ -1,12 +1,13 @@
 #include "elements.hpp"
+#include "map.hpp"
 
-Map g_map('.');
 Elements g_elements;
+Map g_map('.', g_elements);
 
 int main()
 {
-	char l_choice;
-	int c_X, c_Y;
+    char l_choice;
+    int c_X, c_Y;
 
     while (true)
     {
@@ -43,7 +44,6 @@ int main()
                 continue;
             }
 
-            g_map.addPoint(c_X, c_Y, 'O');
             tmpCoordinates.push_back(coordinates);
         }
 
@@ -59,6 +59,8 @@ int main()
             std::cout << std::endl;
         }
 
+        g_map.displayMap();
+
         std::cout << "Do you want to continue playing? (Y/N): ";
         std::cin >> l_choice;
 
@@ -66,5 +68,5 @@ int main()
             break;
     }
 
-	return 0;
+    return 0;
 }
