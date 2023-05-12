@@ -1,18 +1,19 @@
 #pragma once
 
-#include "map.hpp"
+#include <iostream>
+#include <vector>
 
 #ifndef ELEMENT_HPP
 #define ELEMENT_HPP
 
-struct 
+struct
 Element
 {
 
     std::vector<std::pair<int, int>> elementCoordinates;
     int health;
 
-    Element(std::vector<std::pair<int, int>> coordinates, int hlth) : elementCoordinates(coordinates), health(hlth){}
+    Element(std::vector<std::pair<int, int>> coordinates, int hlth) : elementCoordinates(coordinates), health(hlth) {}
 
 };
 
