@@ -110,6 +110,34 @@ Elements
         m_elements.push_back(e);
     }
 
+    void 
+        deleteElement(const Element& e)
+    {
+        for (auto it = m_elements.begin(); it != m_elements.end(); )
+        {
+            const Element& existingElement = *it;
+            bool shouldErase = false;
+
+            for (const auto& coordinate : existingElement.elementCoordinates)
+            {
+                if (std::find(e.elementCoordinates.begin(), e.elementCoordinates.end(), coordinate) != e.elementCoordinates.end())
+                {
+                    shouldErase = true;
+                    break;
+                }
+            }
+
+            if (shouldErase)
+            {
+                it = m_elements.erase(it);
+            }
+            else
+            {
+                ++it;
+            }
+        }
+    }
+
 };
 
 #endif
