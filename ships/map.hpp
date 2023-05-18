@@ -9,12 +9,14 @@
 struct 
 Map
 {
-    char m_playingField[9][9]; //0-9
+
+    char m_playingField[9][9];
     int m_size;
     Elements& m_elements;
 
     Map(char point, Elements& elements) : m_size(9), m_elements(elements)
     {
+
         for (int i = 0; i < m_size; i++)
         {
             for (int j = 0; j < m_size; j++)
@@ -22,11 +24,13 @@ Map
                 m_playingField[j][i] = point;
             }
         }
+
     }
 
     void 
     displayMap()
     {
+
         if (m_size <= 0)
         {
             std::cerr << "Invalid map size.\n";
@@ -43,14 +47,21 @@ Map
 
         for (const auto& element : m_elements.m_elements)
         {
-            for (const std::pair<int, int>& coordinate : element.elementCoordinates)
+            for (const std::pair<int, int>& coordinate : element.m_elementCoordinates)
             {
                 int x = coordinate.first;
                 int y = coordinate.second;
 
                 if (x >= 0 && x < m_size && y >= 0 && y < m_size)
                 {
-                    m_playingField[y][x] = '*';
+                    if (std::find(element.m_hitCoordinates.begin(), element.m_hitCoordinates.end(), coordinate) != element.m_hitCoordinates.end())
+                    {
+                        m_playingField[y][x] = 'X';
+                    }
+                    else
+                    {
+                        m_playingField[y][x] = '*';
+                    }
                 }
                 else
                 {
@@ -67,7 +78,9 @@ Map
             }
             std::cout << "\n";
         }
+
     }
+
 };
 
 #endif
