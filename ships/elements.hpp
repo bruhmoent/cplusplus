@@ -11,12 +11,12 @@ Elements
 
     std::vector<Element> m_elements;
 
-    bool 
+    bool
     isCoordinateTaken(const std::pair<int, int>& coordinate) const
     {
         for (const Element& existingElement : m_elements)
         {
-            for (const auto& existingCoordinate : existingElement.elementCoordinates)
+            for (const auto& existingCoordinate : existingElement.m_elementCoordinates)
             {
                 if (existingCoordinate == coordinate)
                 {
@@ -27,12 +27,12 @@ Elements
         return false;
     }
 
-    bool 
+    bool
     checkForBorder(const Element& e) const
     {
         std::vector<std::pair<int, int>> directions = { {1, 0}, {-1, 0}, {0, 1}, {0, -1} };
 
-        for (const auto& coordinate : e.elementCoordinates)
+        for (const auto& coordinate : e.m_elementCoordinates)
         {
             int x = coordinate.first;
             int y = coordinate.second;
@@ -51,15 +51,16 @@ Elements
         return true;
     }
 
-    bool 
+    bool
     isValidArea(const Element& e) const
     {
-        int minX = e.elementCoordinates[0].first;
-        int maxX = e.elementCoordinates[0].first;
-        int minY = e.elementCoordinates[0].second;
-        int maxY = e.elementCoordinates[0].second;
 
-        for (const auto& coordinate : e.elementCoordinates)
+        int minX = e.m_elementCoordinates[0].first;
+        int maxX = e.m_elementCoordinates[0].first;
+        int minY = e.m_elementCoordinates[0].second;
+        int maxY = e.m_elementCoordinates[0].second;
+
+        for (const auto& coordinate : e.m_elementCoordinates)
         {
             minX = std::min(minX, coordinate.first);
             maxX = std::max(maxX, coordinate.first);
@@ -70,18 +71,20 @@ Elements
         int width = maxX - minX + 1;
         int height = maxY - minY + 1;
 
-        int expectedSize = e.elementCoordinates.size();
+        int expectedSize = e.m_elementCoordinates.size();
         return (width * height) == expectedSize;
+
     }
 
     void
     addElement(Element e)
     {
+
         for (const Element& existingElement : m_elements)
         {
-            for (const auto& coordinate : existingElement.elementCoordinates)
+            for (const auto& coordinate : existingElement.m_elementCoordinates)
             {
-                if (std::find(e.elementCoordinates.begin(), e.elementCoordinates.end(), coordinate) != e.elementCoordinates.end())
+                if (std::find(e.m_elementCoordinates.begin(), e.m_elementCoordinates.end(), coordinate) != e.m_elementCoordinates.end())
                 {
                     std::cerr << "This element already exists.\n";
                     return;
@@ -101,41 +104,33 @@ Elements
             return;
         }
 
-        if (e.elementCoordinates.size() < 2)
+        if (e.m_elementCoordinates.size() < 2)
         {
             std::cerr << "Invalid element. There must be a minimum of 2 coordinates.\n";
             return;
         }
 
         m_elements.push_back(e);
+
     }
 
     void 
-        deleteElement(const Element& e)
+    deleteElement(const Element& e)
     {
-        for (auto it = m_elements.begin(); it != m_elements.end(); )
-        {
-            const Element& existingElement = *it;
-            bool shouldErase = false;
 
-            for (const auto& coordinate : existingElement.elementCoordinates)
+        auto it = std::remove_if(m_elements.begin(), m_elements.end(), [&](const Element& existingElement) {
+            for (const auto& coordinate : existingElement.m_elementCoordinates)
             {
-                if (std::find(e.elementCoordinates.begin(), e.elementCoordinates.end(), coordinate) != e.elementCoordinates.end())
+                if (std::find(e.m_elementCoordinates.begin(), e.m_elementCoordinates.end(), coordinate) != e.m_elementCoordinates.end())
                 {
-                    shouldErase = true;
-                    break;
+                    return true;
                 }
             }
+            return false;
+            });
 
-            if (shouldErase)
-            {
-                it = m_elements.erase(it);
-            }
-            else
-            {
-                ++it;
-            }
-        }
+        m_elements.erase(it, m_elements.end());
+
     }
 
 };
