@@ -1,29 +1,26 @@
-#include <iostream>
+#include <cstddef>
 #include <algorithm>
 
 template<typename T>
-class DynamicArray
+class Vector
 {
 public:
-    DynamicArray()
-    {
-        m_alloc = nullptr;
-        m_size = 0;
-    }
+    Vector() noexcept
+        : m_alloc(nullptr), m_size(0)
+    {}
 
-    DynamicArray(std::initializer_list<T> args)
+    Vector(std::initializer_list<T> args) noexcept
+        : m_alloc(new T[args.size()]), m_size(args.size())
     {
-        m_size = args.size();
-        m_alloc = new T[m_size];
         std::copy(args.begin(), args.end(), m_alloc);
     }
 
-    T* begin()
+    [[nodiscard]] constexpr T* begin() noexcept
     {
         return m_alloc;
     }
 
-    T* end()
+    [[nodiscard]] constexpr const T* end() noexcept
     {
         return m_alloc + m_size;
     }
@@ -46,6 +43,9 @@ public:
 
     void remove(T value)
     {
+        if (m_size == 0)
+            return;
+
         T* new_alloc = new T[m_size - 1];
         std::size_t new_index = 0;
 
@@ -62,12 +62,12 @@ public:
         --m_size;
     }
 
-    int size()
+    [[nodiscard]] constexpr int size() const noexcept
     {
         return m_size;
     }
 
-    ~DynamicArray()
+    ~Vector()
     {
         delete[] m_alloc;
     }
